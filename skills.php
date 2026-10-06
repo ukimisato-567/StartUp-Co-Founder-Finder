@@ -1,4 +1,6 @@
 <?php
+// The list of skills people can pick from (used in register, edit profile, add post and the search boxes).
+// To add a new skill, just write it inside one of the groups below.
 $SKILL_GROUPS = [
     'Development' => [
         'Web Development', 'Frontend', 'Backend', 'Full Stack', 'Mobile App Development',
@@ -32,7 +34,7 @@ $SKILL_GROUPS = [
     ],
 ];
 
-
+// lowercase name => proper name (used to check what was posted)
 $SKILL_MAP = [];
 foreach ($SKILL_GROUPS as $list) {
     foreach ($list as $s) {
@@ -45,7 +47,7 @@ function skill_known($name) {
     return isset($SKILL_MAP[strtolower(trim($name))]);
 }
 
-
+// Reads the ticked skills + the "other skills" box from the form and returns a clean array.
 function collect_skills($arrayKey, $otherKey) {
     global $SKILL_MAP;
     $out = [];
@@ -58,7 +60,7 @@ function collect_skills($arrayKey, $otherKey) {
     }
 
     foreach (explode(',', $_POST[$otherKey] ?? '') as $s) {
-        
+        // keep at most 30 characters (works with any language, no extra PHP extension needed)
         preg_match('/^.{0,30}/us', trim($s), $m);
         $s = trim($m[0] ?? '');
         if ($s !== '' && !isset($out[strtolower($s)])) $out[strtolower($s)] = $s;
@@ -66,16 +68,19 @@ function collect_skills($arrayKey, $otherKey) {
     return array_values($out);
 }
 
-
+// skills are saved in one column as "PHP, Database, Networking"
 function skills_to_text($arr) {
     return implode(', ', $arr);
 }
+
+// returns an error text if the skills are missing or too long for the column, otherwise ''
 function skills_error($arr) {
     if (count($arr) == 0) return "Please select at least one skill.";
     if (strlen(skills_to_text($arr)) > 250) return "You selected too many skills. Please keep the most important ones (about 15).";
     return '';
 }
 
+// the chip picker: search box, groups of skills (tick as many as you like) and an "other" box
 function skill_picker($name, $selected = [], $other = '', $otherName = 'skills_other') {
     global $SKILL_GROUPS;
     $sel = array_map('strtolower', $selected);
@@ -100,7 +105,7 @@ function skill_picker($name, $selected = [], $other = '', $otherName = 'skills_o
     echo '</div>';
 }
 
-
+// dropdown with every skill, used to search posts / people by skill
 function skill_select($name, $current = '', $placeholder = 'Any skill') {
     global $SKILL_GROUPS;
     echo '<select name="' . e($name) . '">';

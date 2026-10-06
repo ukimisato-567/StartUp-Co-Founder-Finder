@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = skills_error($skillList);
     }
 
+    // photo upload (optional)
     if ($error == '' && $_FILES['image']['name'] != '') {
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         if ($_FILES['image']['error'] != 0) {

@@ -1,4 +1,4 @@
-
+// skill picker: live search, selected counter and a warning if too many skills are chosen
 document.querySelectorAll('.skillpick').forEach(function (box) {
     var search = box.querySelector('.skillpick-search');
     var counter = box.querySelector('.skillpick-count');
@@ -16,7 +16,7 @@ document.querySelectorAll('.skillpick').forEach(function (box) {
             if (s.trim() != '') names.push(s.trim());
         });
         counter.textContent = names.length + ' selected';
-       
+        // the database column holds about 250 characters
         var tooMany = names.join(', ').length > 250;
         counter.classList.toggle('too-many', tooMany);
         if (tooMany) counter.textContent += ' - too many, remove a few';
@@ -38,7 +38,7 @@ document.querySelectorAll('.skillpick').forEach(function (box) {
         empty.style.display = shown ? 'none' : 'block';
     }
 
-
+    // pressing Enter in the search box must not submit the form
     search.addEventListener('keydown', function (e) { if (e.key == 'Enter') e.preventDefault(); });
     search.addEventListener('input', filter);
     other.addEventListener('input', update);

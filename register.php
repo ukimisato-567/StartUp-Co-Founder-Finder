@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $q = $pdo->prepare("INSERT INTO users (name, email, phone, password, skills, bio) VALUES (?, ?, ?, ?, ?, ?)");
         $q->execute([$name, $email, $phone, password_hash($pass, PASSWORD_DEFAULT), skills_to_text($skillList), $bio]);
 
-       
+        // give the user a unique id after registration
         $id = $pdo->lastInsertId();
         $uid = "SCF" . (1000 + $id);
         $pdo->prepare("UPDATE users SET uid = ? WHERE id = ?")->execute([$uid, $id]);

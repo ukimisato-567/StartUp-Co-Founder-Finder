@@ -1,10 +1,10 @@
 <?php
 include 'config.php';
-if ($me) { header("Location: home.php"); exit; }
+if ($me) { header("Location: " . ($user['role'] == 'admin' ? 'admin/index.php' : 'home.php')); exit; }
 
 $error = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+    // login with email OR mobile number
     $login = trim($_POST['login']);
     $q = $pdo->prepare("SELECT * FROM users WHERE email = ? OR phone = ?");
     $q->execute([$login, $login]);
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($q->fetchAll() as $user) {
         if (password_verify($_POST['password'], $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            header("Location: home.php");
+            header("Location: " . ($user['role'] == 'admin' ? 'admin/index.php' : 'home.php'));
             exit;
         }
     }

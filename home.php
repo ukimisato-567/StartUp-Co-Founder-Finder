@@ -15,7 +15,7 @@ if ($keyword != '') {
     $params[] = "%$keyword%";
 }
 if ($skill != '') {
-  
+    // exact skill match inside the "A, B, C" list
     $sql .= " AND FIND_IN_SET(?, REPLACE(s.skills_needed, ', ', ','))";
     $params[] = $skill;
 }
@@ -53,7 +53,7 @@ include 'header.php';
   <?php endif; ?>
   <p><?php echo nl2br(e(substr($p['description'], 0, 250))); ?><?php if (strlen($p['description']) > 250) echo '...'; ?></p>
   <p><b>Skills needed:</b> <?php echo skill_tags($p['skills_needed']); ?></p>
-  <a class="btn btn-small" href="view_post.php?id=<?php echo $p['id']; ?>">View details</a>
+  <a class="btn btn-small" href="view_post.php?id=<?php echo $p['id']; ?>">View / Apply</a>
 </div>
 <?php endforeach; ?>
 
